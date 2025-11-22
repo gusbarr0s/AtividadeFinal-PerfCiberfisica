@@ -1,1 +1,55 @@
-Jantar dos filosofos
+Dados:
+  N = 5 filósofos numerados de 0 a N-1
+  garfo[i] é o garfo entre o filósofo i e (i+1) mod N
+  estado[i] em {"pensando", "com fome", "comendo"}
+
+Função filosofo(p):
+  enquanto verdadeiro:
+    pensar()
+    estado[p] <- "com fome"
+
+    //pega primeiro um garfo, depois o outro
+    adquirir(garfo_esquerda(p))   
+    adquirir(garfo_direita(p))    
+
+    estado[p] <- "comendo"
+    comer()
+
+    liberar(garfo_direita(p))
+    liberar(garfo_esquerda(p))
+    estado[p] <- "pensando"
+
+
+-------------------------------------------------------------------------
+
+Dados:
+  N = 5 filósofos numerados de 0 a N-1
+  garfo[0..N-1]  // garfo i fica entre filósofo i e (i+1) mod N
+  estado[0..N-1] em {"pensando", "com fome", "comendo"}
+
+Função garfo_esquerda(p):
+  retorna garfo[p]
+
+Função garfo_direita(p):
+  retorna garfo[(p + 1) mod N]
+
+Função filosofo(p):
+  //define a ordem que os filósofos pegam os garfos
+  left  = min(garfo_esquerda(p), garfo_direita(p))
+  right = max(garfo_esquerda(p), garfo_direita(p))
+
+  enquanto verdadeiro(loop):
+    pensar()
+    estado[p] <- "com fome"
+
+    adquirir(left)//bloqueia ate o garfo de menor índice estar livre
+    adquirir(right)//depois pega o garfo de maior índice
+
+    estado[p] <- "comendo"
+    comer()
+
+    liberar(right)
+    liberar(left)
+
+    estado[p] <- "pensando"
+
